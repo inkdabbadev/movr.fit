@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 
 function useReveal() {
   const ref = useRef(null)
@@ -36,6 +37,9 @@ export default function CTASection() {
         position: 'relative',
         overflow: 'hidden',
         borderTop: '1px solid rgba(255,255,255,0.04)',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
       {/* Background image with strong overlay */}
@@ -66,8 +70,9 @@ export default function CTASection() {
       <div className="container" style={{
         position: 'relative',
         zIndex: 1,
-        paddingTop: 'var(--section-pad)',
-        paddingBottom: 'var(--section-pad)',
+        width: '100%',
+        paddingTop: 'clamp(40px, 6vw, 80px)',
+        paddingBottom: 'clamp(40px, 6vw, 80px)',
       }}>
         <div style={{
           display: 'grid',
@@ -79,52 +84,54 @@ export default function CTASection() {
         >
           {/* Left — Big statement */}
           <div>
-            <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
-
-              <span className="t-small" style={{ color: 'var(--gray-1)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                Start Here
-              </span>
-            </div>
-
-            <h2
-              className="reveal delay-1 t-display-xl"
+            <motion.h2
+              initial={{ opacity: 0, scale: 0.95, filter: 'blur(5px)' }}
+              whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
               style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(130px, 7vw, 90px)',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '-0.02em',
                 color: 'var(--white)',
                 lineHeight: 0.9,
-                marginBottom: '8px',
+                marginBottom: '32px',
               }}
             >
-              FEEL
-            </h2>
-            <h2
-              className="reveal delay-2 t-display-xl"
-              style={{
-                color: 'var(--red)',
-                lineHeight: 0.9,
-                marginBottom: '8px',
-              }}
-            >
-              GOOD.
-            </h2>
-            <h2
-              className="reveal delay-3 t-display-xl"
-              style={{
-                color: 'rgba(255,255,255,0.18)',
-                lineHeight: 0.9,
-                marginBottom: '40px',
-              }}
-            >
-              MOVE WELL.
-            </h2>
+              FEEL <motion.span
+                animate={{ color: ['var(--red)', '#ff6045', 'var(--red)'] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ display: 'inline-block' }}
+              >GOOD.</motion.span><br />
+              <span style={{ color: 'rgba(255,255,255,0.18)' }}>MOVE WELL.</span>
+            </motion.h2>
 
             {/* Guarantees */}
-            <div className="reveal delay-4" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
+                hidden: {}
+              }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+            >
               {[
                 'Free first consultation call',
                 'Custom program from day one',
                 'No lock-in contracts',
-              ].map(item => (
-                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              ].map((item, i) => (
+                <motion.div
+                  key={item}
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+                >
                   <div style={{
                     width: '20px',
                     height: '20px',
@@ -143,9 +150,9 @@ export default function CTASection() {
                   <span style={{ fontSize: '16px', fontWeight: 500, color: 'rgba(255,255,255,0.7)' }}>
                     {item}
                   </span>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Right — Form */}
@@ -154,7 +161,7 @@ export default function CTASection() {
               <div style={{
                 background: 'var(--surface-2)',
                 border: '1px solid rgba(201,58,28,0.3)',
-                borderRadius: '4px',
+                borderRadius: 'var(--radius)',
                 padding: 'clamp(32px, 5vw, 56px)',
                 textAlign: 'center',
               }}>
@@ -194,7 +201,7 @@ export default function CTASection() {
                 style={{
                   background: 'var(--surface-2)',
                   border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '4px',
+                  borderRadius: 'var(--radius)',
                   padding: 'clamp(28px, 4vw, 48px)',
                 }}
               >
@@ -216,24 +223,26 @@ export default function CTASection() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <FormField
-                    label="Full Name"
-                    name="name"
-                    type="text"
-                    placeholder="Your name"
-                    value={form.name}
-                    onChange={handleChange}
-                    required
-                  />
-                  <FormField
-                    label="Email Address"
-                    name="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                  />
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                    <FormField
+                      label="Full Name"
+                      name="name"
+                      type="text"
+                      placeholder="Your name"
+                      value={form.name}
+                      onChange={handleChange}
+                      required
+                    />
+                    <FormField
+                      label="Email Address"
+                      name="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
 
                   <div>
                     <label className="t-small" style={{
@@ -250,12 +259,12 @@ export default function CTASection() {
                       required
                       style={{
                         width: '100%',
-                        padding: '14px 16px',
+                        padding: '12px 16px',
                         background: 'var(--surface-3)',
                         border: '1px solid rgba(255,255,255,0.08)',
-                        borderRadius: '2px',
+                        borderRadius: '8px',
                         color: form.format ? 'var(--white)' : 'rgba(255,255,255,0.4)',
-                        fontSize: '16px',
+                        fontSize: '15px',
                         fontFamily: 'var(--font-body)',
                         outline: 'none',
                         cursor: 'pointer',
@@ -286,20 +295,20 @@ export default function CTASection() {
                       value={form.goal}
                       onChange={handleChange}
                       placeholder="e.g. Build baseline strength, lose fat, improve energy..."
-                      rows={3}
+                      rows={2}
                       style={{
                         width: '100%',
-                        padding: '14px 16px',
+                        padding: '12px 16px',
                         background: 'var(--surface-3)',
                         border: '1px solid rgba(255,255,255,0.08)',
-                        borderRadius: '2px',
+                        borderRadius: '8px',
                         color: 'var(--white)',
-                        fontSize: '16px',
+                        fontSize: '15px',
                         fontFamily: 'var(--font-body)',
                         outline: 'none',
-                        resize: 'vertical',
-                        lineHeight: 1.6,
-                        minHeight: '88px',
+                        resize: 'none',
+                        lineHeight: 1.5,
+                        minHeight: '60px',
                       }}
                     />
                   </div>
@@ -308,7 +317,7 @@ export default function CTASection() {
                 <button
                   type="submit"
                   className="btn btn--primary"
-                  style={{ width: '100%', justifyContent: 'center', marginTop: '32px', padding: '20px', fontSize: '16px' }}
+                  style={{ width: '100%', justifyContent: 'center', marginTop: '24px', padding: '16px', fontSize: '15px' }}
                 >
                   Book a Free Consultation
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -360,12 +369,12 @@ function FormField({ label, name, type, placeholder, value, onChange, required }
         required={required}
         style={{
           width: '100%',
-          padding: '14px 16px',
+          padding: '12px 16px',
           background: 'var(--surface-3)',
           border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '2px',
+          borderRadius: '8px',
           color: 'var(--white)',
-          fontSize: '16px',
+          fontSize: '15px',
           fontFamily: 'var(--font-body)',
           outline: 'none',
           transition: 'border-color 0.2s',

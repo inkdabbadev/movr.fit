@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 
 function useReveal() {
   const ref = useRef(null)
@@ -22,24 +23,21 @@ const combinedPillars = [
     period: 'Yesterday',
     tag: 'Learn',
     pillar: 'Strength',
-    sub: 'Baseline First',
-    text: 'We move baseline strength. Every session is data. Every plateau is information. Every programme begins with intentional loading and building from the ground up — so that strength becomes the foundation. We track what worked, learn from what didn\'t, and carry that forward.',
+    text: 'Every session is data. We build baseline strength from the ground up through intentional loading. We track what worked, learn from what didn\'t, and use that as the foundation for everything else.',
   },
   {
     num: '02',
     period: 'Today',
     tag: 'Act',
     pillar: 'Consistency',
-    sub: 'Repeatable Systems',
-    text: 'We move consistency and confidence. Transformation is a series of simple, repeatable actions stacked across time. Consistent, deliberate action — executed with proper form and the right intensity. Today is the only day you can actually train.',
+    text: 'Transformation is a series of simple, repeatable actions stacked across time. Consistent, deliberate execution matters more than raw intensity. Today is the only day you can actually put in the work.',
   },
   {
     num: '03',
     period: 'Tomorrow',
     tag: 'Build',
     pillar: 'Energy',
-    sub: 'Everyday Vitality',
-    text: 'We move energy levels. Not the kind that burns out — the kind that compounds into your work, your relationships, and your life well beyond the gym. Every rep builds the person you\'re becoming.',
+    text: 'We train for energy that doesn\'t burn out. It compounds into your work, relationships, and life outside the gym. Every rep builds the person you will become tomorrow.',
   },
 ]
 
@@ -92,84 +90,101 @@ export default function MoovarPhilosophy() {
         >
           {/* Left — Sticky editorial column */}
           <div style={{ position: 'sticky', top: '120px' }}>
-            <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
+            <div className="reveal" style={{ marginBottom: '24px' }}>
               <span className="t-small" style={{ color: 'var(--gray-1)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                 The Moovar System
               </span>
             </div>
 
-            {/* Giant "m" letter as drop cap element */}
-            <div
-              className="reveal delay-1"
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(100px, 14vw, 180px)',
-                fontWeight: 900,
-                color: 'var(--red)',
-                lineHeight: 0.85,
-                letterSpacing: '-0.03em',
-                marginBottom: '16px',
-                textTransform: 'uppercase',
-                userSelect: 'none',
-              }}
-            >
-              3
+            {/* 3 + PILLARS / TIMELINES / PEOPLE side by side */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.7 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(100px, 14vw, 160px)',
+                  fontWeight: 900,
+                  color: 'var(--red)',
+                  lineHeight: 1,
+                  letterSpacing: '-0.03em',
+                  userSelect: 'none',
+                  flexShrink: 0,
+                }}
+              >
+                3
+              </motion.div>
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{ visible: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } }, hidden: {} }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px', overflow: 'hidden' }}
+              >
+                {['PILLARS', 'TIMELINES', 'PEOPLE'].map((word) => (
+                  <div key={word} style={{ overflow: 'hidden' }}>
+                    <motion.span
+                      variants={{
+                        hidden: { y: '100%', opacity: 0 },
+                        visible: { y: '0%', opacity: 1, transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } },
+                      }}
+                      style={{
+                        display: 'block',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: 'clamp(18px, 2.2vw, 28px)',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                        color: 'rgba(255,255,255,0.5)',
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {word}
+                    </motion.span>
+                  </div>
+                ))}
+              </motion.div>
             </div>
 
             <h2
               className="reveal delay-2 t-display-md"
-              style={{ color: 'var(--white)', marginBottom: '8px', lineHeight: 0.95 }}
+              style={{ color: 'var(--white)', marginBottom: '16px', lineHeight: 0.95 }}
             >
               THE MOOVAR<br />PRINCIPLE
             </h2>
-            <h3 className="reveal delay-2" style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(24px, 3vw, 36px)',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              color: 'var(--red)',
-              lineHeight: 1.1,
-              marginBottom: '32px'
-            }}>
-              PILLARS. TIMELINES. PEOPLE.
-            </h3>
 
             <p
-              className="reveal delay-3 t-body"
-              style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '24px', lineHeight: 1.7 }}
+              className="reveal delay-3"
+              style={{ color: 'rgba(255,255,255,0.55)', marginBottom: '32px', lineHeight: 1.7, fontSize: 'clamp(15px, 1.5vw, 17px)' }}
             >
-              In Tamil, <em style={{ fontStyle: 'normal', color: 'rgba(255,255,255,0.9)', fontWeight: 600 }}>moovar</em> means three. Three people — you, the coach, and the shared effort. Three timelines — yesterday, today, tomorrow. Three pillars — strength, consistency, energy.
-            </p>
-            <p
-              className="reveal delay-3 t-body"
-              style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: '32px' }}
-            >
-              We move simply. We move consistently. We move strength into everyday life — because long-term health is the ultimate performance metric.
+              In Tamil, <em style={{ fontStyle: 'normal', color: 'var(--white)', fontWeight: 600 }}>moovar</em> means three — three people, three timelines, three pillars. One clear path.
             </p>
 
             <div className="reveal delay-4">
               <div style={{
-                padding: '24px 32px',
+                padding: '20px 24px',
                 background: 'var(--surface-2)',
                 border: '1px solid rgba(255,255,255,0.06)',
                 borderLeft: '4px solid var(--red)',
-                borderRadius: '2px',
+                borderRadius: 'var(--radius)',
               }}>
                 <p style={{
-                  fontSize: '20px',
+                  fontSize: '17px',
                   fontStyle: 'italic',
-                  color: 'rgba(255,255,255,0.9)',
+                  color: 'rgba(255,255,255,0.85)',
                   lineHeight: 1.6,
                 }}>
                   "Long-term health is the ultimate performance metric."
                 </p>
                 <p style={{
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontWeight: 600,
                   letterSpacing: '0.15em',
                   textTransform: 'uppercase',
                   color: 'var(--red)',
-                  marginTop: '16px',
+                  marginTop: '12px',
                 }}>
                   — Coach Vishy
                 </p>
@@ -180,13 +195,16 @@ export default function MoovarPhilosophy() {
           {/* Right — Combined Timeline & Pillars Grid */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginTop: '24px' }}>
             {combinedPillars.map((item, i) => (
-              <div
+              <motion.div
                 key={item.num}
-                className={`reveal delay-${i + 2}`}
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   display: 'flex',
-                  gap: 'clamp(24px, 4vw, 48px)',
-                  paddingBottom: i < combinedPillars.length - 1 ? '60px' : 0,
+                  gap: 'clamp(20px, 3vw, 32px)',
+                  paddingBottom: i < combinedPillars.length - 1 ? '24px' : 0,
                   position: 'relative',
                 }}
               >
@@ -210,32 +228,35 @@ export default function MoovarPhilosophy() {
                     <div style={{
                       width: '2px',
                       flex: 1,
-                      minHeight: '64px',
+                      minHeight: '24px',
                       background: 'linear-gradient(to bottom, rgba(201,58,28,0.5), rgba(201,58,28,0.0))',
-                      marginTop: '12px',
+                      marginTop: '8px',
                     }} />
                   )}
                 </div>
 
                 {/* Content Box */}
-                <div style={{
-                  flex: 1,
-                  background: 'var(--surface-2)',
-                  padding: 'clamp(32px, 4vw, 48px) clamp(24px, 3vw, 40px)',
-                  borderRadius: '2px',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  border: '1px solid rgba(255,255,255,0.03)',
-                  top: '-12px', /* align box perfectly with timeline dot */
-                }}>
+                <motion.div
+                  whileHover={{ y: -4, borderColor: 'rgba(201,58,28,0.25)' }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  style={{
+                    flex: 1,
+                    background: 'var(--surface-2)',
+                    padding: 'clamp(20px, 2.5vw, 24px) clamp(20px, 2.5vw, 24px)',
+                    borderRadius: 'var(--radius)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(255,255,255,0.03)',
+                    top: '-12px',
+                  }}>
                   
                   {/* Faint Number Watermark */}
                   <div style={{
                     position: 'absolute',
-                    top: '-20px',
-                    right: '-10px',
+                    top: '-10px',
+                    right: '0px',
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(100px, 12vw, 160px)',
+                    fontSize: 'clamp(70px, 8vw, 100px)',
                     fontWeight: 900,
                     color: 'rgba(255,255,255,0.02)',
                     lineHeight: 1,
@@ -251,15 +272,15 @@ export default function MoovarPhilosophy() {
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '16px',
-                    marginBottom: '24px',
+                    gap: '12px',
+                    marginBottom: '12px',
                     flexWrap: 'wrap',
                     position: 'relative',
                     zIndex: 1,
                   }}>
                     <span style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: 'clamp(28px, 3vw, 42px)',
+                      fontSize: 'clamp(24px, 2.5vw, 32px)',
                       fontWeight: 900,
                       textTransform: 'uppercase',
                       letterSpacing: '-0.02em',
@@ -276,7 +297,7 @@ export default function MoovarPhilosophy() {
                       letterSpacing: '0.15em',
                       textTransform: 'uppercase',
                       color: 'var(--white)',
-                      borderRadius: '2px',
+                      borderRadius: 'var(--radius)',
                     }}>
                       {item.tag}
                     </span>
@@ -286,14 +307,14 @@ export default function MoovarPhilosophy() {
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '16px',
+                    gap: '10px',
+                    marginBottom: '8px',
                     position: 'relative',
                     zIndex: 1,
                   }}>
                     <h3 style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: 'clamp(24px, 2.5vw, 32px)',
+                      fontSize: 'clamp(20px, 2vw, 26px)',
                       fontWeight: 800,
                       textTransform: 'uppercase',
                       color: 'rgba(255,255,255,0.85)',
@@ -301,17 +322,13 @@ export default function MoovarPhilosophy() {
                     }}>
                       {item.pillar}
                     </h3>
-                    <div style={{ width: '4px', height: '4px', background: 'var(--red)', borderRadius: '50%' }} />
-                    <span className="t-small" style={{ color: 'var(--red)' }}>
-                      {item.sub}
-                    </span>
                   </div>
 
                   <div style={{
-                    width: '40px',
+                    width: '32px',
                     height: '2px',
                     background: 'rgba(255,255,255,0.1)',
-                    marginBottom: '20px',
+                    marginBottom: '12px',
                     position: 'relative',
                     zIndex: 1,
                   }} />
@@ -319,15 +336,15 @@ export default function MoovarPhilosophy() {
                   {/* Body Text */}
                   <p className="t-body" style={{
                     color: 'rgba(255,255,255,0.6)',
-                    lineHeight: 1.65,
-                    fontSize: 'clamp(16px, 1.8vw, 19px)',
+                    lineHeight: 1.5,
+                    fontSize: 'clamp(15px, 1.5vw, 17px)',
                     position: 'relative',
                     zIndex: 1,
                   }}>
                     {item.text}
                   </p>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
         </div>

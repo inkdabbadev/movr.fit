@@ -34,9 +34,10 @@
   --ease-studio:  cubic-bezier(0.76, 0, 0.24, 1);
 
   /* Golden scale padding */
-  --section-pad:  clamp(120px, 15vw, 240px);
+  --section-pad:  clamp(80px, 10vw, 120px);
   --container:    1440px;
   --gutter:       clamp(24px, 6vw, 80px);
+  --radius:       12px;
 }
 
 /* --- Reset --- */
@@ -187,7 +188,7 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.4s var(--ease-studio);
-  border-radius: 2px;
+  border-radius: 100px;
 }
 
 .btn--primary {

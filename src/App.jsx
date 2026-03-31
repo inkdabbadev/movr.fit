@@ -2,13 +2,12 @@ import { useEffect } from 'react'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import ThreePillars from './components/ThreePillars'
+import MoovarPhilosophy from './components/MoovarPhilosophy'
 import CoachSection from './components/CoachSection'
 import Services from './components/Services'
 import MarqueeBand from './components/MarqueeBand'
 import GlobalClients from './components/GlobalClients'
 import Gallery from './components/Gallery'
-import Philosophy from './components/Philosophy'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
@@ -50,13 +49,12 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <ThreePillars />
+        <MoovarPhilosophy />
         <CoachSection />
         <MarqueeBand />
         <GlobalClients />
         <Services />
         <Gallery />
-        <Philosophy />
         <Testimonials />
         <CTASection />
       </main>

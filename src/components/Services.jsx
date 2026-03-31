@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function useReveal() {
   const ref = useRef(null)
@@ -69,8 +70,17 @@ const services = [
   },
 ]
 
+// hover = desktop reveal, click = mobile toggle
+const isHoverDevice = () =>
+  typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches
+
 export default function Services() {
   const ref = useReveal()
+  const [openIndex, setOpenIndex] = useState(null)
+
+  const handleMouseEnter = (i) => { if (isHoverDevice()) setOpenIndex(i) }
+  const handleMouseLeave = ()  => { if (isHoverDevice()) setOpenIndex(null) }
+  const handleClick      = (i, isOpen) => { if (!isHoverDevice()) setOpenIndex(isOpen ? null : i) }
 
   return (
     <section
@@ -93,162 +103,236 @@ export default function Services() {
           gap: '32px',
         }}>
           <div>
-            <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
-            </div>
             <h2
               className="reveal delay-1 t-display-lg"
               style={{ color: 'var(--white)', lineHeight: 0.92 }}
             >
-              HOW WE<br />
-              <span style={{ color: 'var(--red)' }}>WORK</span>
+              HOW WE
+              <span style={{ color: 'var(--red)' }}> WORK</span>
             </h2>
           </div>
-          <p
-            className="reveal delay-2 t-body"
-            style={{
-              color: 'rgba(255,255,255,0.5)',
-              maxWidth: '320px',
-              textAlign: 'right',
-            }}
-          >
-            Three formats. One system. Choose the structure that fits your life — not the other way around.
-          </p>
+
+          {/* Two-line styled subheading */}
+          <div className="reveal delay-2" style={{ textAlign: 'right' }}>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(22px, 3vw, 36px)',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+              lineHeight: 1,
+              color: 'var(--white)',
+            }}>
+              Three formats.
+            </div>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(22px, 3vw, 36px)',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+              lineHeight: 1,
+              color: 'var(--red)',
+              marginBottom: '12px',
+            }}>
+              One system.
+            </div>
+            <p style={{
+              fontSize: '15px',
+              color: 'rgba(255,255,255,0.4)',
+              maxWidth: '260px',
+              lineHeight: 1.6,
+              marginLeft: 'auto',
+            }}>
+              Choose the structure that fits your life — not the other way around.
+            </p>
+          </div>
         </div>
 
-        {/* Cards */}
+        {/* Interactive Cards */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '2px',
+          gap: 'clamp(16px, 2vw, 24px)',
+          alignItems: 'start', // allows expanding without stretching siblings
         }}
           className="services-grid"
         >
-          {services.map((s, i) => (
-            <div
-              key={i}
-              className={`reveal delay-${i + 2}`}
-              style={{
-                background: s.highlight ? 'var(--red)' : 'var(--surface-2)',
-                padding: 'clamp(28px, 3.5vw, 48px)',
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              {/* Tag */}
-              <div style={{ marginBottom: '32px' }}>
-                <span style={{
-                  padding: '6px 16px',
-                  background: s.highlight ? 'rgba(255,255,255,0.15)' : 'rgba(224, 48, 30, 0.12)',
-                  border: `1px solid ${s.highlight ? 'rgba(255,255,255,0.2)' : 'rgba(224, 48, 30, 0.2)'}`,
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase',
-                  color: s.highlight ? 'rgba(255,255,255,0.9)' : 'var(--red)',
-                  borderRadius: '2px',
-                }}>
-                  {s.tag}
-                </span>
-              </div>
+          {services.map((s, i) => {
+            const isOpen = openIndex === i;
 
-              {/* Icon */}
-              <div style={{
-                marginBottom: '24px',
-                color: s.highlight ? 'rgba(255,255,255,0.8)' : 'var(--gray-1)',
-              }}>
-                {s.icon}
-              </div>
-
-              {/* Title */}
-              <h3
+            return (
+              <motion.div
+                key={i}
+                layout
+                onMouseEnter={() => handleMouseEnter(i)}
+                onMouseLeave={() => handleMouseLeave()}
+                onClick={() => handleClick(i, isOpen)}
+                className={`reveal delay-${i + 2}`}
+                whileHover={{ y: -4 }}
                 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(36px, 4vw, 56px)',
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  letterSpacing: '-0.01em',
-                  lineHeight: 0.95,
-                  color: 'var(--white)',
-                  marginBottom: '20px',
-                  whiteSpace: 'pre-line',
+                  background: 'var(--surface-2)',
+                  border: isOpen ? '1px solid var(--red)' : '1px solid rgba(255,255,255,0.05)',
+                  padding: 'clamp(28px, 3.5vw, 40px)',
+                  position: 'relative',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRadius: 'var(--radius)',
+                  cursor: 'pointer',
+                  overflow: 'hidden',
+                  transition: 'background 0.3s, border-color 0.3s',
                 }}
               >
-                {s.title}
-              </h3>
-
-              {/* Divider */}
-              <div style={{
-                width: '32px',
-                height: '2px',
-                background: s.highlight ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)',
-                marginBottom: '20px',
-                borderRadius: '1px',
-              }} />
-
-              {/* Description */}
-              <p style={{
-                fontSize: '16px',
-                lineHeight: 1.6,
-                color: s.highlight ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)',
-                marginBottom: '32px',
-                flex: 1,
-              }}>
-                {s.description}
-              </p>
-
-              {/* Features */}
-              <ul style={{
-                listStyle: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                marginBottom: '36px',
-              }}>
-                {s.features.map(f => (
-                  <li key={f} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    fontSize: '15px',
-                    color: s.highlight ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.6)',
-                    fontWeight: 500,
+                {/* ALWAYS VISIBLE TOP HALF */}
+                <motion.div layout style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+                  <div style={{
+                    padding: '6px 16px',
+                    background: isOpen ? 'rgba(201,58,28,0.15)' : 'rgba(255,255,255,0.05)',
+                    border: `1px solid ${isOpen ? 'rgba(201,58,28,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    color: isOpen ? 'var(--red)' : 'rgba(255,255,255,0.6)',
+                    borderRadius: 'var(--radius)',
+                    transition: 'all 0.3s',
                   }}>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M2 7l3.5 3.5L12 4" stroke={s.highlight ? 'rgba(255,255,255,0.8)' : 'var(--red)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    {s.tag}
+                  </div>
+                  <motion.div
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      width: '32px', height: '32px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: isOpen ? 'var(--red)' : 'var(--surface-3)',
+                      borderRadius: '50%',
+                      color: isOpen ? 'var(--white)' : 'rgba(255,255,255,0.5)'
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M7 1v12M1 7h12" />
                     </svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
+                  </motion.div>
+                </motion.div>
 
-              {/* CTA */}
-              <a
-                href={s.ctaHref || '#cta'}
-                target={s.external ? '_blank' : undefined}
-                rel={s.external ? 'noopener noreferrer' : undefined}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: s.highlight ? 'var(--white)' : 'var(--red)',
-                  textDecoration: 'none',
-                  transition: 'gap 0.2s ease',
-                }}
-                onMouseEnter={e => e.currentTarget.style.gap = '18px'}
-                onMouseLeave={e => e.currentTarget.style.gap = '10px'}
-              >
-                {s.cta}
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            </div>
-          ))}
+                {/* Icon */}
+                <motion.div layout style={{
+                  marginBottom: '20px',
+                  color: isOpen ? 'var(--red)' : 'var(--gray-1)',
+                  transition: 'color 0.3s',
+                }}>
+                  {s.icon}
+                </motion.div>
+
+                {/* Title */}
+                <motion.h3
+                  layout
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(28px, 3vw, 40px)', // slightly smaller since it's simple
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    letterSpacing: '-0.01em',
+                    lineHeight: 0.95,
+                    color: 'var(--white)',
+                    whiteSpace: 'pre-line',
+                    marginBottom: isOpen ? '24px' : '0',
+                  }}
+                >
+                  {s.title}
+                </motion.h3>
+
+                {/* HIDDEN DETAILS EXPANSION */}
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      {/* Divider */}
+                      <div style={{
+                        width: '40px',
+                        height: '2px',
+                        background: 'rgba(201,58,28,0.5)',
+                        marginBottom: '24px',
+                        borderRadius: '1px',
+                      }} />
+
+                      {/* Description */}
+                      <p style={{
+                        fontSize: '15px',
+                        lineHeight: 1.6,
+                        color: 'rgba(255,255,255,0.7)',
+                        marginBottom: '32px',
+                      }}>
+                        {s.description}
+                      </p>
+
+                      {/* Features */}
+                      <ul style={{
+                        listStyle: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        marginBottom: '36px',
+                        margin: 0, padding: 0,
+                      }}>
+                        {s.features.map(f => (
+                          <li key={f} style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            fontSize: '14px',
+                            color: 'rgba(255,255,255,0.8)',
+                            fontWeight: 500,
+                          }}>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+                              <path d="M2 7l3.5 3.5L12 4" stroke="var(--red)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* CTA */}
+                      <a
+                        href={s.ctaHref || '#cta'}
+                        target={s.external ? '_blank' : undefined}
+                        rel={s.external ? 'noopener noreferrer' : undefined}
+                        onClick={e => e.stopPropagation()} // prevent double toggling when clicking button
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          fontSize: '14px',
+                          fontWeight: 700,
+                          letterSpacing: '0.12em',
+                          textTransform: 'uppercase',
+                          color: 'var(--red)',
+                          textDecoration: 'none',
+                          transition: 'gap 0.2s ease',
+                          paddingTop: '20px',
+                          borderTop: '1px solid rgba(255,255,255,0.05)',
+                          width: '100%',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.gap = '16px'}
+                        onMouseLeave={e => e.currentTarget.style.gap = '12px'}
+                      >
+                        {s.cta}
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </a>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
 

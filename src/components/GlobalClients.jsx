@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 
 const countries = [
   { code: 'in', name: 'India' },
@@ -15,24 +15,12 @@ const countries = [
   { code: 'sg', name: 'Singapore' },
 ]
 
+const ease = [0.16, 1, 0.3, 1]
+const vp = { once: true, margin: '-40px' }
+
 export default function GlobalClients() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const targets = el.querySelectorAll('.reveal, .reveal--scale')
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed') }),
-      { threshold: 0.1 }
-    )
-    targets.forEach(t => obs.observe(t))
-    return () => obs.disconnect()
-  }, [])
-
   return (
     <section
-      ref={ref}
       style={{
         background: 'var(--black)',
         borderTop: '1px solid rgba(255,255,255,0.04)',
@@ -41,99 +29,93 @@ export default function GlobalClients() {
         position: 'relative',
       }}
     >
-      {/* Subtle red glow */}
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '80vw',
-        height: '200px',
-        background: 'radial-gradient(ellipse at center, rgba(201,58,28,0.06) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
+      {/* Animated red glow */}
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80vw', height: '200px',
+          background: 'radial-gradient(ellipse at center, rgba(201,58,28,0.07) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
       <div className="container" style={{ paddingTop: 'clamp(56px, 8vw, 80px)', paddingBottom: 'clamp(56px, 8vw, 80px)' }}>
         {/* Header */}
-        <div
-          className="reveal"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={vp}
+          transition={{ duration: 0.7, ease }}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-            marginBottom: 'clamp(32px, 5vw, 48px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexWrap: 'wrap', gap: '16px', marginBottom: 'clamp(32px, 5vw, 48px)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <span className="t-small" style={{ color: 'var(--gray-1)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-              Clients Currently In
-            </span>
-          </div>
-          <div style={{
-            padding: '6px 20px',
-            background: 'rgba(201,58,28,0.1)',
-            border: '1px solid rgba(201,58,28,0.2)',
-            borderRadius: '2px',
-            fontSize: '13px',
-            fontWeight: 700,
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'var(--red)',
-          }}>
+          <span className="t-small" style={{ color: 'var(--gray-1)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+            Clients Currently In
+          </span>
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={vp}
+            transition={{ type: 'spring', stiffness: 280, damping: 18, delay: 0.15 }}
+            style={{
+              padding: '6px 20px',
+              background: 'rgba(201,58,28,0.1)', border: '1px solid rgba(201,58,28,0.2)',
+              borderRadius: '100px', fontSize: '13px', fontWeight: 700,
+              letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--red)',
+            }}
+          >
             12 Countries
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Country badges grid */}
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '10px',
-          }}
+        {/* Badges — wave bounce stagger */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={vp}
+          variants={{ visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } } }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}
         >
           {countries.map((country, i) => (
-            <div
+            <motion.div
               key={country.name}
-              className={`reveal--scale delay-${Math.min(i + 1, 6)}`}
+              variants={{
+                hidden: { scale: 0.5, opacity: 0, y: 20 },
+                visible: {
+                  scale: 1, opacity: 1, y: 0,
+                  transition: { type: 'spring', stiffness: 320, damping: 22 },
+                },
+              }}
+              whileHover={{
+                y: -6, scale: 1.06,
+                borderColor: 'rgba(201,58,28,0.5)',
+                background: 'rgba(201,58,28,0.08)',
+                transition: { type: 'spring', stiffness: 400, damping: 20 },
+              }}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
+                display: 'inline-flex', alignItems: 'center', gap: '10px',
                 padding: '10px 20px',
                 background: 'var(--surface-2)',
                 border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: '100px',
-                cursor: 'default',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'rgba(201,58,28,0.35)'
-                e.currentTarget.style.background = 'rgba(201,58,28,0.06)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                e.currentTarget.style.background = 'var(--surface-2)'
+                borderRadius: '100px', cursor: 'default',
               }}
             >
-              <img 
-                src={`https://flagcdn.com/${country.code}.svg`} 
-                alt={`${country.name} flag`} 
-                style={{ width: '20px', height: '14px', objectFit: 'cover', borderRadius: '2px' }} 
+              <img
+                src={`https://flagcdn.com/${country.code}.svg`}
+                alt={`${country.name} flag`}
+                style={{ width: '20px', height: '14px', objectFit: 'cover', borderRadius: '2px' }}
               />
-              <span style={{
-                fontSize: '14px',
-                fontWeight: 600,
-                color: 'rgba(255,255,255,0.75)',
-                letterSpacing: '0.04em',
-              }}>
+              <span style={{ fontSize: '14px', fontWeight: 600, color: 'rgba(255,255,255,0.75)', letterSpacing: '0.04em' }}>
                 {country.name}
               </span>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )
