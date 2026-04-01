@@ -1,18 +1,27 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
+import Preloader from './components/Preloader'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import MoovarPhilosophy from './components/MoovarPhilosophy'
-import CoachSection from './components/CoachSection'
-import Services from './components/Services'
-import MarqueeBand from './components/MarqueeBand'
-import GlobalClients from './components/GlobalClients'
-import Gallery from './components/Gallery'
-import Testimonials from './components/Testimonials'
-import CTASection from './components/CTASection'
 import Footer from './components/Footer'
+import Hero from './sections/Hero'
+import MoovarPhilosophy from './sections/MoovarPhilosophy'
+import CoachSection from './sections/CoachSection'
+import MarqueeBand from './sections/MarqueeBand'
+import GlobalClients from './sections/GlobalClients'
+import Services from './sections/Services'
+import Gallery from './sections/Gallery'
+import Testimonials from './sections/Testimonials'
+import CTASection from './sections/CTASection'
 
 export default function App() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1800)
+    return () => clearTimeout(t)
+  }, [])
+
   // Global IntersectionObserver for all .reveal elements not handled by individual components
   useEffect(() => {
     const lenis = new Lenis({
@@ -46,6 +55,7 @@ export default function App() {
 
   return (
     <>
+      <AnimatePresence>{loading && <Preloader />}</AnimatePresence>
       <Navbar />
       <main>
         <Hero />

@@ -95,6 +95,7 @@ export default function Navbar() {
             className="nav-mobile-toggle"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
             style={{
               background: 'none',
               border: 'none',

@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "Bash(mkdir -p \"/c/Users/ashwi/Documents/Project/INKDABBA/MOVRFIT/movr-2/src/sections\")",
+      "Bash(mv components/Hero.jsx sections/)",
+      "Bash(mv components/MoovarPhilosophy.jsx sections/)",
+      "Bash(mv components/CoachSection.jsx sections/)",
+      "Bash(mv components/MarqueeBand.jsx sections/)",
+      "Bash(npm run:*)"
     ]
   }
 }
