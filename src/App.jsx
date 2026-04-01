@@ -60,12 +60,13 @@ export default function App() {
       <main>
         <Hero />
         <MoovarPhilosophy />
-        <CoachSection />
         <MarqueeBand />
+        <CoachSection />
         <GlobalClients />
         <Services />
         <Gallery />
         <Testimonials />
+        <MarqueeBand />
         <CTASection />
       </main>
       <Footer />

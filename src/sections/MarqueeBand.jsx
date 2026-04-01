@@ -1,34 +1,61 @@
 import { motion } from 'framer-motion'
 
-const BandItem = () => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '64px', flexShrink: 0 }}>
-    {Array.from({ length: 40 }).map((_, i) => (
-      <img key={i} src="/favicon.svg" alt="MOVRFIT" style={{ height: '52px', width: 'auto', display: 'block', flexShrink: 0 }} />
-    ))}
-  </div>
-)
+const items = Array.from({ length: 24 })
 
-export default function MarqueeBand() {
+function LogoRow() {
   return (
     <div
       style={{
-        background: '#080808ff',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '64px',
+        flexShrink: 0,
+        paddingRight: '64px',
+      }}
+    >
+      {items.map((_, i) => (
+        <img
+          key={i}
+          src="/favicon.svg"
+          alt="MOVRFIT"
+          style={{
+            height: '52px',
+            width: 'auto',
+            display: 'block',
+            flexShrink: 0,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export default function MarqueeBand() {
+  return (
+    <section
+      style={{
+        width: '100%',
         overflow: 'hidden',
-        borderTop: '1px solid rgba(0, 0, 0, 0.1)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0)',
+        background: '#080808',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '20px 0',
           overflow: 'hidden',
+          width: '100%',
+          padding: '20px 0',
         }}
       >
         <motion.div
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ ease: "linear", duration: 30, repeat: Infinity }}
+          initial={{ x: '0%' }}
+          animate={{ x: '-50%' }}
+          transition={{
+            duration: 20,
+            ease: 'linear',
+            repeat: Infinity,
+          }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -36,10 +63,10 @@ export default function MarqueeBand() {
             willChange: 'transform',
           }}
         >
-          <BandItem />
-          <BandItem />
+          <LogoRow />
+          <LogoRow />
         </motion.div>
       </div>
-    </div>
+    </section>
   )
 }
