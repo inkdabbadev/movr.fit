@@ -25,14 +25,28 @@ export default function CTASection() {
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
   const handleSubmit = e => {
     e.preventDefault()
-    const lines = [
-      `Hi Coach Vishy! I'd like to book a free consultation.`,
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      form.format ? `Format: ${form.format}` : null,
-      form.goal ? `Goal: ${form.goal}` : null,
+    
+    // Map internal values to readable labels for the message
+    const formatLabels = {
+      'in-person': 'In-Person Training',
+      'online': 'Online Coaching',
+      'hybrid': 'Hybrid Program'
+    }
+    const displayFormat = formatLabels[form.format] || form.format
+
+    const message = [
+      `👋 *New Consultation Request*`,
+      `━━━━━━━━━━━━━━━━━━`,
+      `*Name:* ${form.name}`,
+      `*Email:* ${form.email}`,
+      form.format ? `*Format:* ${displayFormat}` : null,
+      form.goal ? `\n*Primary Goal:*\n${form.goal}` : null,
+      `━━━━━━━━━━━━━━━━━━`,
+      `_Sent from movr.fit_`
     ].filter(Boolean).join('\n')
-    window.open(`https://wa.me/919791063135?text=${encodeURIComponent(lines)}`, '_blank', 'noopener,noreferrer')
+    
+    const whatsappUrl = `https://wa.me/919791063135?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
     setSubmitted(true)
   }
 
